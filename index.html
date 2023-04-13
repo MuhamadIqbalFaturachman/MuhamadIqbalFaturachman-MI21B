@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UTS-IQBAL-FN</title>
+  <style>
+    table,
+    tr,
+    th,
+    td {
+      border: 1px solid black;
+      padding: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h3>Bakso Japri</h3>
+  <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+  <p>Nama Pesanan <input id="name" type="text" placeholder="Isi nama disini..."></p>
+  <div>
+
+    <table style="margin-top: 10px">
+        <thead>
+            
+          <tr>
+            <th>
+                <img src="https://www.apacara.com/logo.png" alt="logo apacara.com" />
+            <h3>Mie Bakso Halus</h3>
+            <p>Rp.10000</p>
+            <button id="button" onclick="saveData()">Pesan</button>
+            <th>
+        </th>
+          </tr>
+        
+        </thead>
+      </table>
+
+  </div>
+  <table style="margin-top: 10px">
+    <thead>
+      <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>Pesanan</th>
+        <th>Jumlah</th>
+        <th>Harga</th>
+        <th>Aksi</th>
+      </tr>
+     
+    </thead>
+    <tbody id="result"></tbody>
+  </table>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+
+    const saveData = async () => {
+      let nameForm = document.getElementById('name').value;
+      let pesananForm = document.getElementById('pesanan').value;
+      letjumlahForm = document.getElementById('price').value;
+      await axios.post(`http://localhost:3000/menu`, {
+        name: nameForm,
+        pesanan: pesananForm,
+       jumlah, harga, Total:jumlah, harga, TotalForm
+      })
+        .then((response) => {
+          alert('sukses')
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error.message);
+        });
+    }
+
+    const deleteData = async (id) => {
+      let text = "Betul data akan dihapus?";
+      if (confirm(text) == true) {
+        await axios.delete(`http://localhost:3000/orders/${id}`)
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+      }
+
+
+    }
+
+    const getData = async () => {
+      await axios.get(`http://localhost:3000/menu`)
+        .then((response) => {
+          let bucket = ``;
+          let students = response.data;
+
+          if (students.length > 0) {
+            for (let i = 0; i < students.length; i++) {
+              bucket += `
+              <tr>
+                <td>${i + 1}</td>
+                <td>${students[i].name}</td>
+                <td>${students[i].order}</td>
+                <td>${students[i].count}</td>
+                <td>${students[i].price}</td>
+                <td>
+                  <button onclick="getData('${students[i].id}','${students[i].name}','${students[i].order}','${students[i].count}','${students[i].price})">Pesan</button>
+                  <button onclick="deleteData(${students[i].id})">Batal</button>
+                </td>
+              </tr>
+              <th>Total</th> <td>${students[i].total}</td>`
+            }
+          } else {
+            bucket += `
+              <tr>
+                <td colspan="5" style="text-align: center">Data tidak ditemukan</td>
+              </tr>
+            `
+          }
+
+          document.getElementById('result').innerHTML = bucket;
+        })
+        .catch((error) => {
+          let bucket = `
+          <tr>
+            <td colspan="5" style="text-align: center">${error.message}</td>
+          </tr>
+        `
+          document.getElementById('result').innerHTML = bucket;
+        });
+    }
+    getData();
+  </script>
+</body>
+
+</html>
