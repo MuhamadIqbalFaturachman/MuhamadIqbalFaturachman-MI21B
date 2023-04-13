@@ -1,0 +1,17 @@
+{
+  "menu": [
+    {
+      "name": "",
+      "price": ""
+    }
+  ],
+  "orders": [
+    {
+      "name": "Iqbal",
+      "order": "Mie Bakso Halus",
+      "count": "1",
+      "price": 10000,
+      "total": 10000
+    }
+  ]
+}
